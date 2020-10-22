@@ -1,0 +1,50 @@
+version: '3.7'
+services:
+  nc:
+    image: nextcloud:apache
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_PASSWORD=nextcloud
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+    ports:
+      - 80:80
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+            - node.role == worker
+    volumes:
+      - nc_data:/var/www/html
+  db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_PASSWORD=nextcloud
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=nextcloud
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 2 
+      placement:
+        constraints:
+            - node.role == worker
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  portainer:
+      image: portainer/portainer
+      deploy:
+          mode: replicated
+      ports:
+        - 9000:9000
+      volumes:
+        - portainer_data:/data
+        - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  db_data:
+  nc_data:
+  portainer_data: 
