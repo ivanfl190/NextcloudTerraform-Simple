@@ -12,8 +12,4 @@
    - docker stack deploy -c nc.yaml app
 
 
-Para acessar deve se adicionar o endereço ip publico em seguida a porta.
-
- 
-
- 
+Para acessar,na caixa de URL deve se adicionar o endereço ip publico em seguida a porta. 
